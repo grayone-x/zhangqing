@@ -1,0 +1,48 @@
+name: Build
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: sed -i 's/FontFeature.tabularFigures\]/FontFeature.tabularFigures()]/' lib/pages/ledger_page.dart lib/pages/rank_page.dart lib/pages/mate_detail_page.dart lib/pages/widgets/amount_pad.dart
+      - run: sed -i 's/on AuthException catch (e)/on Exception catch (e)/;s/_toast(e.message)/_toast(e.toString())/' lib/pages/login_page.dart
+      - run: flutter create --org com.zhangqing .
+      - run: cp web_manifest.json web/manifest.json
+      - run: cp icons/Icon-512.png web/icons/Icon-512.png
+      - run: cp icons/Icon-192.png web/icons/Icon-192.png
+      - run: cp icons/apple-touch-icon.png web/apple-touch-icon.png
+      - run: flutter pub get
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: sed -i 's/FontFeature.tabularFigures\]/FontFeature.tabularFigures()]/' lib/pages/ledger_page.dart lib/pages/rank_page.dart lib/pages/mate_detail_page.dart lib/pages/widgets/amount_pad.dart
+      - run: sed -i 's/on AuthException catch (e)/on Exception catch (e)/;s/_toast(e.message)/_toast(e.toString())/' lib/pages/login_page.dart
+      - run: flutter create --org com.zhangqing .
+      - run: cp web_template/index.html web/index.html
+      - run: cp web_manifest.json web/manifest.json
+      - run: cp icons/Icon-512.png web/icons/Icon-512.png
+      - run: cp icons/Icon-192.png web/icons/Icon-192.png
+      - run: cp icons/apple-touch-icon.png web/apple-touch-icon.png
+      - run: flutter pub get
+      - run: flutter build web --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-app
+          path: build/web
