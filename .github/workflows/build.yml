@@ -11,6 +11,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+      - run: cp -r zhangqing_clean/. .
       - run: sed -i 's/FontFeature.tabularFigures\]/FontFeature.tabularFigures()]/' lib/pages/ledger_page.dart lib/pages/rank_page.dart lib/pages/mate_detail_page.dart lib/pages/widgets/amount_pad.dart
       - run: sed -i 's/on AuthException catch (e)/on Exception catch (e)/;s/_toast(e.message)/_toast(e.toString())/' lib/pages/login_page.dart
       - run: flutter create --org com.zhangqing .
@@ -32,6 +33,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+      - run: cp -r zhangqing_clean/. .
       - run: sed -i 's/FontFeature.tabularFigures\]/FontFeature.tabularFigures()]/' lib/pages/ledger_page.dart lib/pages/rank_page.dart lib/pages/mate_detail_page.dart lib/pages/widgets/amount_pad.dart
       - run: sed -i 's/on AuthException catch (e)/on Exception catch (e)/;s/_toast(e.message)/_toast(e.toString())/' lib/pages/login_page.dart
       - run: flutter create --org com.zhangqing .
